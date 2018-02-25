@@ -52,8 +52,20 @@ UserSchema.methods.generateAuthToken = function () {
   });
 };
 
+//Instance Method
+UserSchema.methods.removeToken = function (token) {
+  var user = this; //This is Instance
+
+  // Pull the matching token from the array to remove
+  return user.update({
+    $pull: {
+      tokens: {token}
+    }
+  });
+};
+
 UserSchema.statics.findByToken = function (token) { //This is a model method
-  var User = this; //This is model
+  var User = this; //This is model not instance
   var decoded;
 
   try{
@@ -106,6 +118,7 @@ UserSchema.pre('save', function(next) {
     next();
   }
 });
+
 // {
 //   email: 'a@a.com',
 //   password: 'asdasdfsaf',
